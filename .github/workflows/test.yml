@@ -2,30 +2,46 @@ name: EBAC CI
 
 on:
   push:
-    branches: [ci]
+    branches:
+      - ci
 
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 16
+          cache: npm
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v7
-        continue-on-error: true
-        with:
-          install-command: npm install
-          browser: chrome
+      - name: Instalar dependências
+        run: npm ci
 
-      - name: Publish Report
+      - name: Executar testes
+        run: npm run cy:run-ci
+
+      - name: Gerar relatório
+        if: always()
+        run: |
+          if compgen -G "mochawesome-report/mochawesome*.json" > /dev/null; then
+            npm run cy:report
+          else
+            echo "Nenhum arquivo JSON do Mochawesome foi gerado."
+          fi
+
+      - name: Publicar relatório
+        if: ${{ always() && hashFiles('mochawesome-report/index.html') != '' }}
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./mochawesome-report 
+          publish_dir: ./mochawesome-report
