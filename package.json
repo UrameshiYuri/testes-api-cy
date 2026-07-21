@@ -7,7 +7,7 @@
     "test": "npm run cy:run",
     "start": "npx serverest",
     "cy:run": "cypress run",
-    "cy:run-ci": "start-server-and-test start http://localhost:3000/api-doc cy:run",
+    "cy:run-ci": "start-server-and-test start http-get://localhost:3000/api-doc cy:run",
     "cy:report": "mochawesome-merge \"./mochawesome-report/mochawesome*.json\" > mochawesome-report/report.json && marge mochawesome-report/report.json --reportDir mochawesome-report --reportFilename index"
   },
   "keywords": [],
