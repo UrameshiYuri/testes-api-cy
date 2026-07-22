@@ -11,7 +11,7 @@ module.exports = defineConfig({
   },
 
 e2e: {
-  baseUrl: 'http://localhost:3000/?lang=pt-BR',
+  baseUrl: 'http://localhost:3000',
   supportFile: false,
 
   setupNodeEvents(on, config) {
