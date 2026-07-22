@@ -10,11 +10,12 @@ module.exports = defineConfig({
     json: true
   },
 
-  e2e: {
-    baseUrl: 'http://localhost:3000/?lang=pt-BR',
+e2e: {
+  baseUrl: 'http://localhost:3000/?lang=pt-BR',
+  supportFile: false,
 
-    setupNodeEvents(on, config) {
-      return config
-    }
+  setupNodeEvents(on, config) {
+    return config
   }
+}
 })
